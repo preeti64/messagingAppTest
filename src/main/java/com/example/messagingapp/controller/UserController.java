@@ -21,7 +21,11 @@ public class UserController {
         try {
             String uniNickName = nickName.toLowerCase();
             UserResponse userResponse = userServiceImpl.createNewUser(uniNickName);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+            if (userResponse.getStatus() == 1) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userResponse);
+            } else {
+                return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

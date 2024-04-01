@@ -1,6 +1,5 @@
 package com.example.messagingapp.config;
 
-
 import com.example.messagingapp.model.Message;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,15 +10,11 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Configuration
 public class KafkaProducerConfig {
-
-
     @Bean
     public ProducerFactory<String, Message> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -28,7 +23,6 @@ public class KafkaProducerConfig {
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
-
 
     @Bean
     public KafkaTemplate<String, Message> kafkaTemplate() {
