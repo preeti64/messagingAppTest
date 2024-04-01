@@ -1,5 +1,7 @@
-package com.example.messagingapp.controller;
+package com.example.messagingapp.tests;
 
+import com.example.messagingapp.bean.SendMessageRequest;
+import com.example.messagingapp.controller.MessageController;
 import com.example.messagingapp.dto.MessageDTO;
 import com.example.messagingapp.model.Message;
 import com.example.messagingapp.model.User;
@@ -47,7 +49,7 @@ public class MessageControllerTests {
         when(messageService.sendMessage(sender, receiver, "Hello"))
                 .thenThrow(new IllegalArgumentException("Cannot send a message to yourself"));
 
-        MessageController.SendMessageRequest request = new MessageController.SendMessageRequest();
+        SendMessageRequest request = new SendMessageRequest();
         request.setSenderId(1L);
         request.setReceiverId(2L);
         request.setContent("Hello");
@@ -63,7 +65,7 @@ public class MessageControllerTests {
         user.setId(1L);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        MessageController.SendMessageRequest request = new MessageController.SendMessageRequest();
+        SendMessageRequest request = new SendMessageRequest();
         request.setSenderId(1L);
         request.setReceiverId(1L);
         request.setContent("Hello");

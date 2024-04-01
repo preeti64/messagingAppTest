@@ -5,11 +5,13 @@ import com.example.messagingapp.model.Message;
 import com.example.messagingapp.model.User;
 import com.example.messagingapp.repository.UserRepository;
 import com.example.messagingapp.service.MessageServiceImpl;
+import com.example.messagingapp.bean.SendMessageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,8 +38,9 @@ public class MessageController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot send a message to yourself");
             }
 
-            Message message = messageServiceImpl.sendMessage(sender, receiver, request.getContent());
+            Message message = messageServiceImpl.sendMessage(sender, receiver, request.getContent()).join();
 
+            System.out.println("hi");
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Not Found (404) status code if sender or receiver not found
@@ -102,34 +105,34 @@ public class MessageController {
         }
     }
 
-    public static class SendMessageRequest {
-        private Long senderId;
-        private Long receiverId;
-        private String content;
-
-        public Long getSenderId() {
-            return senderId;
-        }
-
-        public void setSenderId(Long senderId) {
-            this.senderId = senderId;
-        }
-
-        public Long getReceiverId() {
-            return receiverId;
-        }
-
-        public void setReceiverId(Long receiverId) {
-            this.receiverId = receiverId;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-    }
+//    public static class SendMessageRequest {
+//        private Long senderId;
+//        private Long receiverId;
+//        private String content;
+//
+//        public Long getSenderId() {
+//            return senderId;
+//        }
+//
+//        public void setSenderId(Long senderId) {
+//            this.senderId = senderId;
+//        }
+//
+//        public Long getReceiverId() {
+//            return receiverId;
+//        }
+//
+//        public void setReceiverId(Long receiverId) {
+//            this.receiverId = receiverId;
+//        }
+//
+//        public String getContent() {
+//            return content;
+//        }
+//
+//        public void setContent(String content) {
+//            this.content = content;
+//        }
+//    }
 
 }

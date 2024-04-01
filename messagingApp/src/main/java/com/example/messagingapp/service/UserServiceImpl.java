@@ -15,7 +15,8 @@ public class UserServiceImpl{
         this.userRepository = userRepository;
     }
 
-    public User createNewUser(String nickname) {
+    public UserResponse
+    createNewUser(String nickname) {
         String nickName = nickname.toLowerCase();
         User existingUser = userRepository.findByNickName(nickName);
         if (existingUser != null) {

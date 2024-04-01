@@ -20,6 +20,7 @@ public class UserController {
         try {
             String nickName = nickname.toLowerCase();
             User newUser = userServiceImpl.createNewUser(nickName);
+            System.out.println("Response code from Controller: " + ResponseEntity.status(HttpStatus.CREATED).body(newUser));
             return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

@@ -17,6 +17,7 @@ class KafkaConsumerConfig {
 
     @KafkaListener(topics = "received-messages", groupId = "group-id")
     public void consumeNewMessage(Message message) {
+        System.out.println("Hi in kafka");
         messageService.sendMessage(message.getSender(), message.getReceiver(), message.getMessageContent());
     }
 }

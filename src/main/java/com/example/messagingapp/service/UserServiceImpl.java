@@ -1,11 +1,12 @@
 package com.example.messagingapp.service;
 
+import com.example.messagingapp.bean.UserResponse;
 import com.example.messagingapp.model.User;
 import com.example.messagingapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl{
+public class UserServiceImpl {
 
     private final UserRepository userRepository;
 
@@ -13,14 +14,20 @@ public class UserServiceImpl{
         this.userRepository = userRepository;
     }
 
-    public User createNewUser(String nickName) {
+    public UserResponse createNewUser(String nickName) {
+        UserResponse userResponse = new UserResponse();
         String uniNickName = nickName.toLowerCase();
         User existingUser = userRepository.findByNickName(uniNickName);
         if (existingUser != null) {
-            throw new IllegalArgumentException("Nickname already exists");
+            userResponse.setMessage("Nickname already exists");
+            userResponse.setStatus(1);
+        } else {
+            User user = new User();
+            user.setNickName(uniNickName);
+            userRepository.save(user);
+            userResponse.setMessage("New user created");
+            userResponse.setStatus(0);
         }
-        User user = new User();
-        user.setNickName(uniNickName);
-        return userRepository.save(user);
+        return userResponse;
     }
 }
