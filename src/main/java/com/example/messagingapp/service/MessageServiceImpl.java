@@ -33,7 +33,7 @@ public class MessageServiceImpl{
         message.setReceiver(receiver);
         message.setMessageContent(messageContent);
         System.out.println("hi before topic creation");
-        kafkaTemplate.send("received-messages", message);
+        //kafkaTemplate.send("received-messages", message);
         return CompletableFuture.completedFuture(messageRepository.save(message));
     }
     public List<Message> getReceivedMessages(User receiver) {
