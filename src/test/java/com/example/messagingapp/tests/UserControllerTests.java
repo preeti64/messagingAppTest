@@ -12,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,7 +53,6 @@ public class UserControllerTests {
 
     @Test
     void testCreateUserWithInvalidNicknameLength() {
-        // Setup
         String invalidNickNameShort = "ab";
 
         boolean isValid = userService.isValidNickname(invalidNickNameShort);

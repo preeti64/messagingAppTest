@@ -53,7 +53,11 @@ public class MessageController {
     @GetMapping("/received")
     public ResponseEntity<List<MessageDTO>> getReceivedMessages(@RequestParam Long userId) {
         try {
+                if (userId == null) {
+                    return ResponseEntity.badRequest().build();
+                }
             User sender = userService.findUserById(userId);
+
             List<Message> sentMessages = messageServiceImpl.getReceivedMessages(sender);
             List<MessageDTO> messageDTOs = sentMessages.stream()
                     .map(message -> new MessageDTO(message.getMessageId(), message.getMessageContent()))
@@ -70,6 +74,9 @@ public class MessageController {
     @GetMapping("/sent")
     public ResponseEntity<List<MessageDTO>> getSentMessages(@RequestParam Long userId) {
         try {
+            if (userId == null) {
+                return ResponseEntity.badRequest().build();
+            }
             User sender = userService.findUserById(userId);
             List<Message> sentMessages = messageServiceImpl.getSentMessages(sender);
             List<MessageDTO> messageDTOs = sentMessages.stream()
