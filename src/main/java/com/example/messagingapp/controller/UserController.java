@@ -17,7 +17,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestParam(required = false) String nickName) {
+    public ResponseEntity<?> createUser(@RequestParam String nickName) {
         try {
             String uniNickName = nickName.toLowerCase();
             if (!userServiceImpl.isValidNickname(nickName)) {

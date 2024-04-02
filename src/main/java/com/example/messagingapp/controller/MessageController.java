@@ -28,6 +28,12 @@ public class MessageController {
 
     @PostMapping
     public ResponseEntity<?> sendMessage(@RequestBody SendMessageRequest request) {
+        Long senderId = request.getSenderId();
+        Long receiverId = request.getReceiverId();
+
+        if (senderId == null || receiverId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sender ID or Receiver ID cannot be null");
+        }
         try {
             User sender = userRepository.findById(request.getSenderId())
                     .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
