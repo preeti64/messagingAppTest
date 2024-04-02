@@ -84,7 +84,7 @@ public class MessageControllerTests {
         List<Message> mockMessages = List.of(new Message(), new Message());
         when(messageService.getReceivedMessages(user)).thenReturn(mockMessages);
 
-        ResponseEntity<List<MessageDTO>> response = messageController.getReceivedMessages(1L);
+        ResponseEntity<?> response = messageController.getReceivedMessages(1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockMessages.size(), Objects.requireNonNull(response.getBody()).size());

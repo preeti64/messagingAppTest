@@ -50,4 +50,17 @@ public class MessageServiceImpl {
     public List<Message> getMessagesFromUser(User sender, User receiver) {
         return messageRepository.findBySenderAndReceiver(sender, receiver);
     }
+    public boolean hasReceivedMessages(User receiver) {
+        List<Message> receivedMessages = messageRepository.findByReceiver(receiver);
+        return !receivedMessages.isEmpty();
+    }
+    public boolean hasSentMessages(User sender) {
+        List<Message> sentMessages = messageRepository.findBySender(sender);
+        return !sentMessages.isEmpty();
+    }
+    public boolean hasSentMessagesToReceiver(User sender, User receiver) {
+        List<Message> sentMessagesToReceiver = messageRepository.findBySenderAndReceiver(sender, receiver);
+        return !sentMessagesToReceiver.isEmpty();
+    }
+
 }

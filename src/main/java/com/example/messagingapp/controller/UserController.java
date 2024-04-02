@@ -17,8 +17,11 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestParam String nickName) {
+    public ResponseEntity<?> createUser(@RequestParam (required = false) String nickName) {
         try {
+            if (nickName == null || nickName.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname value is empty. Please add a value.");
+            }
             String uniNickName = nickName.toLowerCase();
             UserResponse userResponse = userServiceImpl.createNewUser(uniNickName);
             if (userResponse.getStatus() == 1) {

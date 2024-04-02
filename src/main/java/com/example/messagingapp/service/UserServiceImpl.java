@@ -18,6 +18,11 @@ public class UserServiceImpl {
         UserResponse userResponse = new UserResponse();
         String uniNickName = nickName.toLowerCase();
         User existingUser = userRepository.findByNickName(uniNickName);
+        if (nickName.trim().isEmpty()) {
+            userResponse.setMessage("Nickname value is empty. Please add a value.");
+            userResponse.setStatus(1);
+            return userResponse;
+        }
         if (existingUser != null) {
             userResponse.setMessage("Nickname already exists");
             userResponse.setStatus(1);
