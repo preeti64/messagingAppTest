@@ -1,4 +1,4 @@
-package com.example.messagingapp.tests;
+package com.example.messagingapp.controller.tests;
 
 import com.example.messagingapp.bean.SendMessageRequest;
 import com.example.messagingapp.controller.MessageController;

@@ -1,5 +1,5 @@
 
-package com.example.messagingapp.tests;
+package com.example.messagingapp.controller.tests;
 
 import com.example.messagingapp.bean.UserResponse;
 import com.example.messagingapp.model.User;
