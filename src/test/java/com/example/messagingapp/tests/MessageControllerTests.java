@@ -88,7 +88,6 @@ public class MessageControllerTests {
 
         List<Message> mockMessages = List.of(new Message(), new Message());
         when(messageService.getReceivedMessages(user)).thenReturn(mockMessages);
-        when(messageService.hasReceivedMessages(user)).thenReturn(true);
 
         ResponseEntity<List<MessageDTO>> response = messageController.getReceivedMessages(1L);
 
@@ -104,7 +103,6 @@ public class MessageControllerTests {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(receiver));
 
         // Mock the MessageService to return true for hasReceivedMessages
-        when(messageService.hasReceivedMessages(receiver)).thenReturn(true);
 
         // Mock the received messages
         List<Message> receivedMessages = Arrays.asList(new Message(), new Message());
@@ -126,7 +124,7 @@ public class MessageControllerTests {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(receiver));
 
         // Mock the MessageService to return false for hasReceivedMessages
-        when(messageService.hasReceivedMessages(receiver)).thenReturn(false);
+        //when(messageService.hasReceivedMessages(receiver)).thenReturn(false);
 
         // Call the controller method
         ResponseEntity<List<MessageDTO>> response = messageController.getReceivedMessages(1L);
@@ -146,7 +144,7 @@ public class MessageControllerTests {
 
         List<Message> mockMessages = List.of(new Message(), new Message());
         when(messageService.getSentMessages(user)).thenReturn(mockMessages);
-        when(messageService.hasSentMessages(user)).thenReturn(true);
+        //when(messageService.hasSentMessages(user)).thenReturn(true);
 
         ResponseEntity<List<MessageDTO>> response = messageController.getSentMessages(1L);
 
@@ -160,7 +158,7 @@ public class MessageControllerTests {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(sender));
 
         // Mock the MessageService to return false for hasReceivedMessages
-        when(messageService.hasSentMessages(sender)).thenReturn(false);
+       // when(messageService.hasSentMessages(sender)).thenReturn(false);
 
         // Call the controller method
         ResponseEntity<List<MessageDTO>> response = messageController.getSentMessages(1L);
@@ -183,7 +181,7 @@ public class MessageControllerTests {
 
         List<Message> mockMessages = List.of(new Message(), new Message());
         when(messageService.getMessagesFromUser(sender, receiver)).thenReturn(mockMessages);
-        when(messageService.hasSentMessagesToReceiver(sender, receiver)).thenReturn(true);
+        //when(messageService.hasSentMessagesToReceiver(sender, receiver)).thenReturn(true);
 
         ResponseEntity<List<MessageDTO>> response = messageController.getMessagesFromUser(1L, 2L);
 

@@ -45,7 +45,11 @@ public class UserServiceImpl {
         return nickname.length() >= minLength && nickname.length() <= maxLength;
     }
 
-    public boolean isValidUserId(Long userId) {
-        return userId != null && userId > 0;
+    public boolean ifValidUserIdExists(Long userId) {
+        return userId == null || userId <= 0;
+    }
+    public User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
     }
 }

@@ -27,7 +27,7 @@ public class MessageServiceImpl {
 
     @Async
     public CompletableFuture<Message> sendMessage(User sender, User receiver, String messageContent) {
-        if (!userService.isValidUserId(sender.getId()) || !userService.isValidUserId(receiver.getId())) {
+        if (userService.ifValidUserIdExists(sender.getId()) || userService.ifValidUserIdExists(receiver.getId())) {
             throw new IllegalArgumentException("Invalid user ID(s) provided.");
         }
         Message message = new Message();
@@ -52,17 +52,6 @@ public class MessageServiceImpl {
     public List<Message> getMessagesFromUser(User sender, User receiver) {
         return messageRepository.findBySenderAndReceiver(sender, receiver);
     }
-    public boolean hasReceivedMessages(User receiver) {
-        List<Message> receivedMessages = getReceivedMessages(receiver);
-        return !receivedMessages.isEmpty();
-    }
-    public boolean hasSentMessages(User sender) {
-        List<Message> sentMessages = getSentMessages(sender);
-        return !sentMessages.isEmpty();
-    }
-    public boolean hasSentMessagesToReceiver(User sender, User receiver) {
-        List<Message> sentMessagesToReceiver = getMessagesFromUser(sender, receiver);
-        return !sentMessagesToReceiver.isEmpty();
-    }
+
 
 }
