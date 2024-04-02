@@ -16,17 +16,19 @@ public class MessageServiceImpl {
 
     private final MessageRepository messageRepository;
     private final KafkaTemplate<String, Message> kafkaTemplate;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public MessageServiceImpl(MessageRepository messageRepository, KafkaTemplate<String, Message> kafkaTemplate) {
+    public MessageServiceImpl(MessageRepository messageRepository, KafkaTemplate<String, Message> kafkaTemplate, UserServiceImpl userService) {
         this.messageRepository = messageRepository;
         this.kafkaTemplate = kafkaTemplate;
+        this.userService = userService;
     }
 
     @Async
     public CompletableFuture<Message> sendMessage(User sender, User receiver, String messageContent) {
-        if (sender.getId().equals(receiver.getId())) {
-            throw new IllegalArgumentException("Cannot send a message to yourself");
+        if (!userService.isValidUserId(sender.getId()) || !userService.isValidUserId(receiver.getId())) {
+            throw new IllegalArgumentException("Invalid user ID(s) provided.");
         }
         Message message = new Message();
         message.setSender(sender);
@@ -51,15 +53,15 @@ public class MessageServiceImpl {
         return messageRepository.findBySenderAndReceiver(sender, receiver);
     }
     public boolean hasReceivedMessages(User receiver) {
-        List<Message> receivedMessages = messageRepository.findByReceiver(receiver);
+        List<Message> receivedMessages = getReceivedMessages(receiver);
         return !receivedMessages.isEmpty();
     }
     public boolean hasSentMessages(User sender) {
-        List<Message> sentMessages = messageRepository.findBySender(sender);
+        List<Message> sentMessages = getSentMessages(sender);
         return !sentMessages.isEmpty();
     }
     public boolean hasSentMessagesToReceiver(User sender, User receiver) {
-        List<Message> sentMessagesToReceiver = messageRepository.findBySenderAndReceiver(sender, receiver);
+        List<Message> sentMessagesToReceiver = getMessagesFromUser(sender, receiver);
         return !sentMessagesToReceiver.isEmpty();
     }
 

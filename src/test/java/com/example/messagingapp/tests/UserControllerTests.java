@@ -12,9 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,6 +51,22 @@ public class UserControllerTests {
         UserResponse responseEntity = userService.createNewUser(nickName);
 
         assertEquals(MessageAppConstraints.FAIL, responseEntity.getStatus());
+    }
+
+    @Test
+    void testCreateUserWithInvalidNicknameLength() {
+        // Setup
+        String invalidNickNameShort = "ab";
+
+        boolean isValid = userService.isValidNickname(invalidNickNameShort);
+
+        assertFalse(isValid);
+
+        String invalidNicknameLong = "thisisaverylongnicknamewhichexceedsmaximumlength";
+
+        boolean isValidLong = userService.isValidNickname(invalidNicknameLong);
+
+        assertFalse(isValidLong);
     }
 
 }

@@ -17,12 +17,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestParam (required = false) String nickName) {
+    public ResponseEntity<?> createUser(@RequestParam(required = false) String nickName) {
         try {
-            if (nickName == null || nickName.trim().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname value is empty. Please add a value.");
-            }
             String uniNickName = nickName.toLowerCase();
+            if (!userServiceImpl.isValidNickname(nickName)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid.Nickname should have minimum length 3 and maximum 30 characters.");
+            }
             UserResponse userResponse = userServiceImpl.createNewUser(uniNickName);
             if (userResponse.getStatus() == 1) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userResponse);

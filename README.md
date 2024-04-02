@@ -115,17 +115,15 @@ The application utilizes Kafka for asynchronous messaging by putting messages on
 
 1. Validations:
 
-Validate input data such as nicknames, message content, and user IDs. 
+Validate input data such as message content.
 Implement server-side validation for input length, format, and content.
 
-2. User Nickname Validation
-
-3. Message Queue Error Handling:
+2.  Message Queue Error Handling:
 Implement robust error handling and retry mechanisms for message queue operations to handle failures gracefully.
 
-4. Message Status Tracking: Allow users to see the delivery and read status of their sent messages.
+3.  Message Status Tracking: Allow users to see the delivery and read status of their sent messages.
 
-5. Enable users to filter and sort their messages based on various criteria such as date, sender, receiver, or message status.
+4.  Enable users to filter and sort their messages based on various criteria such as date, sender, receiver, or message status.
 
 
 

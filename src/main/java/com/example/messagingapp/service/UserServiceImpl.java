@@ -35,4 +35,17 @@ public class UserServiceImpl {
         }
         return userResponse;
     }
+
+    public boolean isValidNickname(String nickname) {
+        if (nickname == null || nickname.isEmpty()) {
+            return false;
+        }
+        int minLength = 3;
+        int maxLength = 30;
+        return nickname.length() >= minLength && nickname.length() <= maxLength;
+    }
+
+    public boolean isValidUserId(Long userId) {
+        return userId != null && userId > 0;
+    }
 }
