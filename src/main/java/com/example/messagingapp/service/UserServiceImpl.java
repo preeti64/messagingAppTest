@@ -1,8 +1,9 @@
 package com.example.messagingapp.service;
 
-import com.example.messagingapp.bean.UserResponse;
-import com.example.messagingapp.model.User;
+import com.example.messagingapp.controller.model.UserResponse;
+import com.example.messagingapp.service.model.User;
 import com.example.messagingapp.repository.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,38 +17,35 @@ public class UserServiceImpl {
 
     public UserResponse createNewUser(String nickName) {
         UserResponse userResponse = new UserResponse();
-        String uniNickName = nickName.toLowerCase();
-        User existingUser = userRepository.findByNickName(uniNickName);
-        if (nickName.trim().isEmpty()) {
+        if (nickName == null || nickName.isEmpty()) {
             userResponse.setMessage("Nickname value is empty. Please add a value.");
             userResponse.setStatus(1);
             return userResponse;
         }
-        if (existingUser != null) {
-            userResponse.setMessage("Nickname already exists");
-            userResponse.setStatus(1);
-        } else {
-            User user = new User();
-            user.setNickName(uniNickName);
-            userRepository.save(user);
-            userResponse.setMessage("New user created");
-            userResponse.setStatus(0);
+        String lowerCaseNickName = nickName.trim().toLowerCase();
+        try {
+            User existingUser = userRepository.findByNickName(lowerCaseNickName);
+            if (existingUser != null) {
+                userResponse.setMessage("Nickname already exists");
+                userResponse.setStatus(1);
+            } else {
+                User user = new User();
+                user.setNickName(lowerCaseNickName);
+                userRepository.save(user);
+                userResponse.setMessage("New user created");
+                userResponse.setStatus(0);
+            }
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Nickname already exists");
         }
-        return userResponse;
-    }
 
-    public boolean isValidNickname(String nickname) {
-        if (nickname == null || nickname.isEmpty()) {
-            return false;
-        }
-        int minLength = 3;
-        int maxLength = 30;
-        return nickname.length() >= minLength && nickname.length() <= maxLength;
+        return userResponse;
     }
 
     public boolean ifValidUserIdExists(Long userId) {
         return userId == null || userId <= 0;
     }
+
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));

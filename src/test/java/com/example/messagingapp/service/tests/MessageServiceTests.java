@@ -1,7 +1,7 @@
 package com.example.messagingapp.service.tests;
 
-import com.example.messagingapp.model.Message;
-import com.example.messagingapp.model.User;
+import com.example.messagingapp.service.model.Message;
+import com.example.messagingapp.service.model.User;
 import com.example.messagingapp.repository.MessageRepository;
 import com.example.messagingapp.service.MessageServiceImpl;
 import com.example.messagingapp.service.UserServiceImpl;
@@ -22,12 +22,6 @@ public class MessageServiceTests {
 
     @Mock
     private MessageRepository messageRepository;
-
-    @Mock
-    private KafkaTemplate<String, Message> kafkaTemplate;
-
-    @Mock
-    private UserServiceImpl userService;
 
     @InjectMocks
     private MessageServiceImpl messageService;

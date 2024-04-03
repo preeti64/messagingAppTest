@@ -1,69 +1,58 @@
-
 package com.example.messagingapp.controller.tests;
 
-import com.example.messagingapp.bean.UserResponse;
-import com.example.messagingapp.model.User;
-import com.example.messagingapp.repository.UserRepository;
+import com.example.messagingapp.controller.UserController;
+import com.example.messagingapp.controller.model.UserResponse;
 import com.example.messagingapp.service.UserServiceImpl;
-import com.example.messagingapp.utils.MessageAppConstraints;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTests {
-    @InjectMocks
-    private UserServiceImpl userService;
+
     @Mock
-    private UserRepository userRepository;
+    private UserServiceImpl userService;
+
+    @InjectMocks
+    private UserController userController;
+
 
     @Test
     public void testCreateUserSuccess() {
         String nickName = "testUser";
-        User user = new User();
-        user.setId(1L);
-        user.setNickName(nickName);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setStatus(0);
+        userResponse.setMessage("New user created");
 
-        when(userRepository.findByNickName(Mockito.anyString())).thenReturn(null);
+        when(userService.createNewUser(anyString())).thenReturn(userResponse);
 
-        UserResponse responseEntity = userService.createNewUser(nickName);
+        ResponseEntity<?> responseEntity = userController.createUser(nickName);
 
-        assertEquals(MessageAppConstraints.SUCCESS, responseEntity.getStatus());
-
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(userResponse, responseEntity.getBody());
     }
 
     @Test
     public void testCreateUserNicknameExists() {
-        String nickName = "test1User";
-        User existingUser = new User();
-        existingUser.setNickName(nickName);
+        String nickName = "existingUser";
+        UserResponse userResponse = new UserResponse();
+        userResponse.setStatus(1);
+        userResponse.setMessage("Nickname already exists");
 
-        lenient(). when(userRepository.findByNickName(Mockito.anyString())).thenReturn(existingUser);
+        when(userService.createNewUser(anyString())).thenReturn(userResponse);
 
-        UserResponse responseEntity = userService.createNewUser(nickName);
+        ResponseEntity<?> responseEntity = userController.createUser(nickName);
 
-        assertEquals(MessageAppConstraints.FAIL, responseEntity.getStatus());
-    }
-
-    @Test
-    void testCreateUserWithInvalidNicknameLength() {
-        String invalidNickNameShort = "ab";
-
-        boolean isValid = userService.isValidNickname(invalidNickNameShort);
-
-        assertFalse(isValid);
-
-        String invalidNicknameLong = "thisisaverylongnicknamewhichexceedsmaximumlength";
-
-        boolean isValidLong = userService.isValidNickname(invalidNicknameLong);
-
-        assertFalse(isValidLong);
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(userResponse, responseEntity.getBody());
     }
 
 }

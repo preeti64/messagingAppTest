@@ -1,7 +1,7 @@
 package com.example.messagingapp.service;
 
-import com.example.messagingapp.model.Message;
-import com.example.messagingapp.model.User;
+import com.example.messagingapp.service.model.Message;
+import com.example.messagingapp.service.model.User;
 import com.example.messagingapp.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;

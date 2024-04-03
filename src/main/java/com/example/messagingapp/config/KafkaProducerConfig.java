@@ -1,6 +1,6 @@
 package com.example.messagingapp.config;
 
-import com.example.messagingapp.model.Message;
+import com.example.messagingapp.service.model.Message;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;

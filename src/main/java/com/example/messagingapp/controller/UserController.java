@@ -1,6 +1,6 @@
 package com.example.messagingapp.controller;
 
-import com.example.messagingapp.bean.UserResponse;
+import com.example.messagingapp.controller.model.UserResponse;
 import com.example.messagingapp.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +19,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestParam String nickName) {
         try {
-            String uniNickName = nickName.toLowerCase();
-            if (!userServiceImpl.isValidNickname(nickName)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid.Nickname should have minimum length 3 and maximum 30 characters.");
-            }
-            UserResponse userResponse = userServiceImpl.createNewUser(uniNickName);
+            UserResponse userResponse = userServiceImpl.createNewUser(nickName);
             if (userResponse.getStatus() == 1) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userResponse);
             } else {

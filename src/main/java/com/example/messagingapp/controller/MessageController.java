@@ -1,10 +1,10 @@
 package com.example.messagingapp.controller;
 
-import com.example.messagingapp.dto.MessageDTO;
-import com.example.messagingapp.model.Message;
-import com.example.messagingapp.model.User;
+import com.example.messagingapp.repository.dto.MessageDTO;
+import com.example.messagingapp.service.model.Message;
+import com.example.messagingapp.service.model.User;
 import com.example.messagingapp.service.MessageServiceImpl;
-import com.example.messagingapp.bean.SendMessageRequest;
+import com.example.messagingapp.controller.model.SendMessageRequest;
 import com.example.messagingapp.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +54,7 @@ public class MessageController {
     public ResponseEntity<List<MessageDTO>> getReceivedMessages(@RequestParam Long userId) {
         try {
                 if (userId == null) {
-                    return ResponseEntity.badRequest().build();
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
                 }
             User sender = userService.findUserById(userId);
 
@@ -75,7 +75,7 @@ public class MessageController {
     public ResponseEntity<List<MessageDTO>> getSentMessages(@RequestParam Long userId) {
         try {
             if (userId == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             User sender = userService.findUserById(userId);
             List<Message> sentMessages = messageServiceImpl.getSentMessages(sender);

@@ -1,7 +1,7 @@
 
 package com.example.messagingapp.config;
 
-import com.example.messagingapp.model.Message;
+import com.example.messagingapp.service.model.Message;
 import com.example.messagingapp.service.MessageServiceImpl;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;

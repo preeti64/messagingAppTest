@@ -1,10 +1,10 @@
 package com.example.messagingapp.controller.tests;
 
-import com.example.messagingapp.bean.SendMessageRequest;
+import com.example.messagingapp.controller.model.SendMessageRequest;
 import com.example.messagingapp.controller.MessageController;
-import com.example.messagingapp.dto.MessageDTO;
-import com.example.messagingapp.model.Message;
-import com.example.messagingapp.model.User;
+import com.example.messagingapp.repository.dto.MessageDTO;
+import com.example.messagingapp.service.model.Message;
+import com.example.messagingapp.service.model.User;
 import com.example.messagingapp.service.MessageServiceImpl;
 import com.example.messagingapp.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
