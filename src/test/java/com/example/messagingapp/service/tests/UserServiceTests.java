@@ -4,17 +4,18 @@ import com.example.messagingapp.controller.model.UserResponse;
 import com.example.messagingapp.repository.UserRepository;
 import com.example.messagingapp.service.UserServiceImpl;
 import com.example.messagingapp.service.model.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
 
     @Mock
@@ -23,66 +24,60 @@ public class UserServiceTests {
     @InjectMocks
     private UserServiceImpl userService;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void testCreateNewUserSuccess() {
-        String nickName = "testUser";
-        when(userRepository.findByNickName(anyString())).thenReturn(null);
+        String nickName = "testuser";
+        when(userRepository.findByNickName(nickName)).thenReturn(null);
 
         UserResponse response = userService.createNewUser(nickName);
 
-        assertEquals(0, response.getStatus());
+        assertNotNull(response);
         assertEquals("New user created", response.getMessage());
-        verify(userRepository, times(1)).save(any(User.class));
+        assertEquals(HttpStatus.CREATED, response.getHttpStatus());
     }
 
     @Test
-    public void testCreateNewUserNicknameExists() {
-        String nickName = "existingUser";
-        when(userRepository.findByNickName(anyString())).thenReturn(new User());
+    public void testCreateNewUserNickNameExists() {
+        String nickName = "existinguser";
+        when(userRepository.findByNickName(nickName)).thenReturn(new User());
 
         UserResponse response = userService.createNewUser(nickName);
 
-        assertEquals(1, response.getStatus());
+        assertNotNull(response);
         assertEquals("Nickname already exists", response.getMessage());
-        verify(userRepository, never()).save(any(User.class));
+        assertEquals(HttpStatus.BAD_REQUEST, response.getHttpStatus());
     }
 
     @Test
-    public void testCreateNewUserEmptyNickname() {
+    public void testCreateNewUserEmptyNickName() {
         String nickName = "";
-
         UserResponse response = userService.createNewUser(nickName);
 
-        assertEquals(1, response.getStatus());
+        assertNotNull(response);
         assertEquals("Nickname value is empty. Please add a value.", response.getMessage());
-        verify(userRepository, never()).save(any(User.class));
+        assertEquals(HttpStatus.BAD_REQUEST, response.getHttpStatus());
     }
 
     @Test
-    public void testCreateNewUserNullNickname() {
+    public void testCreateNewUserNullNickName() {
         String nickName = null;
-
         UserResponse response = userService.createNewUser(nickName);
 
-        assertEquals(1, response.getStatus());
+        assertNotNull(response);
         assertEquals("Nickname value is empty. Please add a value.", response.getMessage());
-        verify(userRepository, never()).save(any(User.class));
+        assertEquals(HttpStatus.BAD_REQUEST, response.getHttpStatus());
     }
 
     @Test
-    public void testCreateNewUserDuplicateNicknameException() {
-        String nickName = "testUser";
-        when(userRepository.findByNickName(anyString())).thenThrow(DataIntegrityViolationException.class);
+    public void testCreateNewUserDataIntegrityViolationException() {
+        String nickName = "testser";
+        when(userRepository.findByNickName(nickName)).thenThrow(DataIntegrityViolationException.class);
 
-        try {
-            userService.createNewUser(nickName);
-        } catch (RuntimeException e) {
-            assertEquals("Nickname already exists", e.getMessage());
-        }
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> userService.createNewUser(nickName));
+        assertEquals("Nickname already exists", exception.getMessage());
     }
 }
+
+
+

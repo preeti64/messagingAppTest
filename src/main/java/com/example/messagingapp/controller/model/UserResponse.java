@@ -1,22 +1,16 @@
 package com.example.messagingapp.controller.model;
 
+import lombok.*;
+import org.springframework.http.HttpStatus;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserResponse {
     private String message;
-    private int status;
+    private boolean success;
+    private HttpStatus httpStatus;
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 }

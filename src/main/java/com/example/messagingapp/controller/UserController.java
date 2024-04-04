@@ -17,16 +17,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestParam String nickName) {
+    public ResponseEntity<UserResponse> createUser(@RequestParam String nickName) {
         try {
             UserResponse userResponse = userServiceImpl.createNewUser(nickName);
-            if (userResponse.getStatus() == 1) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userResponse);
-            } else {
-                return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
-            }
+            return ResponseEntity.status(userResponse.getHttpStatus()).body(userResponse);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(UserResponse.builder().message("INTERNAL_SERVER_ERROR").success(false).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build());
         }
     }
 }

@@ -1,7 +1,11 @@
 package com.example.messagingapp.service.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(schema = "public")
 public class User {
@@ -11,19 +15,4 @@ public class User {
     @Column(unique = true)
     private String nickName;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
 }

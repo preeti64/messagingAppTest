@@ -4,6 +4,7 @@ import com.example.messagingapp.controller.model.UserResponse;
 import com.example.messagingapp.service.model.User;
 import com.example.messagingapp.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +20,7 @@ public class UserServiceImpl {
         UserResponse userResponse = new UserResponse();
         if (nickName == null || nickName.isEmpty()) {
             userResponse.setMessage("Nickname value is empty. Please add a value.");
-            userResponse.setStatus(1);
+            userResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
             return userResponse;
         }
         String lowerCaseNickName = nickName.trim().toLowerCase();
@@ -27,16 +28,19 @@ public class UserServiceImpl {
             User existingUser = userRepository.findByNickName(lowerCaseNickName);
             if (existingUser != null) {
                 userResponse.setMessage("Nickname already exists");
-                userResponse.setStatus(1);
+                userResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+                return userResponse;
             } else {
                 User user = new User();
                 user.setNickName(lowerCaseNickName);
                 userRepository.save(user);
                 userResponse.setMessage("New user created");
-                userResponse.setStatus(0);
+                userResponse.setHttpStatus(HttpStatus.CREATED);
             }
         } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Nickname already exists");
+             userResponse.setMessage("Nickname already exists");
+                   userResponse.setHttpStatus(HttpStatus.BAD_REQUEST);throw new IllegalArgumentException("Nickname already exists");
+
         }
 
         return userResponse;

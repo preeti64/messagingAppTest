@@ -22,29 +22,27 @@ public class MessageController {
 
     public MessageController(MessageServiceImpl messageServiceImpl, UserServiceImpl userService) {
         this.messageServiceImpl = messageServiceImpl;
-        this.userService =  userService;
+        this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<?> sendMessage(@RequestBody SendMessageRequest request) {
-        Long senderId = request.getSenderId();
-        Long receiverId = request.getReceiverId();
-
-        if (senderId == null || receiverId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sender ID or Receiver ID cannot be null");
-        }
+    public ResponseEntity<String> sendMessage(@RequestBody SendMessageRequest request) {
         try {
+            Long senderId = request.getSenderId();
+            Long receiverId = request.getReceiverId();
+
+            if (senderId == null || receiverId == null) {
+                throw new IllegalArgumentException("Sender ID or Receiver ID cannot be null");
+            }
+
             User sender = userService.findUserById(senderId);
             User receiver = userService.findUserById(receiverId);
 
-            if (sender.getId().equals(receiver.getId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot send a message to yourself");
-            }
-            Message message = messageServiceImpl.sendMessage(sender, receiver, request.getContent()).join();
-            return ResponseEntity.ok(message);
+            messageServiceImpl.sendMessage(sender, receiver, request.getContent()).join();
+            return ResponseEntity.ok("Message sent successfully");
 
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
         }
@@ -53,9 +51,9 @@ public class MessageController {
     @GetMapping("/received")
     public ResponseEntity<List<MessageDTO>> getReceivedMessages(@RequestParam Long userId) {
         try {
-                if (userId == null) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-                }
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
             User sender = userService.findUserById(userId);
 
             List<Message> sentMessages = messageServiceImpl.getReceivedMessages(sender);
