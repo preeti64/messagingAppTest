@@ -3,9 +3,14 @@ package com.example.messagingapp.service;
 import com.example.messagingapp.controller.model.UserResponse;
 import com.example.messagingapp.service.model.User;
 import com.example.messagingapp.repository.UserRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl {
@@ -38,8 +43,9 @@ public class UserServiceImpl {
                 userResponse.setHttpStatus(HttpStatus.CREATED);
             }
         } catch (DataIntegrityViolationException e) {
-             userResponse.setMessage("Nickname already exists");
-                   userResponse.setHttpStatus(HttpStatus.BAD_REQUEST);throw new IllegalArgumentException("Nickname already exists");
+            userResponse.setMessage("Nickname already exists");
+            userResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Nickname already exists");
 
         }
 
@@ -54,4 +60,17 @@ public class UserServiceImpl {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
     }
+
+    public List<User> findUsersByNickNameStartingWith(String nickName) {
+        try {
+            Specification<User> spec = (root, query, cb) -> cb.like(root.get("nickName"), nickName + "%");
+            return userRepository.findAll(spec, Sort.by("nickName"));
+            //return userRepository.findByNickNameStartingWith(nickName, Sort.by(nickName));
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Error while fetching users");
+
+        }
+    }
+
+
 }
