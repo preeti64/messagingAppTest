@@ -1,0 +1,4 @@
+com/example/messagingapp/controller/tests/MessageControllerTests.class
+com/example/messagingapp/controller/tests/UserControllerTests.class
+com/example/messagingapp/service/tests/MessageServiceTests.class
+com/example/messagingapp/service/tests/UserServiceTests.class
