@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     User findByNickName(String nickName);
-    List<User> findByNickNameStartingWith(String nickName);
-     //List<User> findByNickNameStartingWith(String nickName, Sort sort);
+
+    List<User> findByNickNameStartingWith(String nickName, Sort sort);
 }
